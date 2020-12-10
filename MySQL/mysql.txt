@@ -116,4 +116,108 @@ SELECT * FROM good_type LIMIT 2;
 -- получить все категории товаров со скидкой < 10% и отсортировать их по названию --
 SELECT name, discount  FROM category  WHERE discount < 10 ORDER BY name;
 
+(SQL - команды DELETE и UPDATE)
 
+UPDATE category SET name = 'Головные уборы' WHERE id = 5;
+UPDATE category SET discount = 3 WHERE id = 2 OR id = 5;
+UPDATE category SET discount = 3 WHERE id IN (2,5); // равнозначные записи строчкой выше
+DELETE FROM category WHERE id = 5;
+
+(Согласованность данных)
+INSERT INTO product (brand_id, product_type_id, category_id, price) VALUES (1,1,1,8999);
+
+
+(Внешний ключ)
+
+CREATE TABLE `shop`.`products`
+(
+    `vendor_code`     VARCHAR(128)   NOT NULL,
+    `brand_id`        INT            NOT NULL,
+    `product_type_id` INT            NOT NULL,
+    `category_id`     INT            NOT NULL,
+    `price`           DECIMAL(10, 2) NOT NULL,
+    PRIMARY KEY (`vendor_code`),
+    FOREIGN KEY (`brand_id`) REFERENCES brand (`id`),
+    FOREIGN KEY (`product_type_id`) REFERENCES product_type (`id`),
+    FOREIGN KEY (`category_id`) REFERENCES category (`id`)
+);
+
+ALTER TABLE `shop`.`product` 
+DROP FOREIGN KEY `fk_product_type`,
+DROP FOREIGN KEY `fk_category_id`;
+ALTER TABLE `shop`.`product` 
+ADD INDEX `fk_category_product_idx` (`category_id` ASC) VISIBLE,
+ADD INDEX `fk_product_type_product_idx` (`product_type_id` ASC) VISIBLE,
+DROP INDEX `fk_category_id_idx` ,
+DROP INDEX `fk_product_type_idx` ;
+;
+ALTER TABLE `shop`.`product` 
+ADD CONSTRAINT `fk_category_product`
+  FOREIGN KEY (`category_id`)
+  REFERENCES `shop`.`category` (`id`)
+  ON DELETE CASCADE
+  ON UPDATE NO ACTION,
+ADD CONSTRAINT `fk_product_type_product`
+  FOREIGN KEY (`product_type_id`)
+  REFERENCES `shop`.`product_type` (`id`)
+  ON DELETE CASCADE
+  ON UPDATE NO ACTION;
+
+ALTER TABLE `shop`.`product` 
+DROP FOREIGN KEY `fk_product_type`,
+DROP FOREIGN KEY `fk_category_id`;
+ALTER TABLE `shop`.`product` 
+ADD INDEX `fk_category_product_idx` (`category_id` ASC) VISIBLE,
+ADD INDEX `fk_product_type_product_idx` (`product_type_id` ASC) VISIBLE,
+DROP INDEX `fk_category_id_idx` ,
+DROP INDEX `fk_product_type_idx` ;
+;
+ALTER TABLE `shop`.`product` 
+ADD CONSTRAINT `fk_category_product`
+  FOREIGN KEY (`category_id`)
+  REFERENCES `shop`.`category` (`id`)
+  ON DELETE CASCADE
+  ON UPDATE NO ACTION,
+ADD CONSTRAINT `fk_product_type_product`
+  FOREIGN KEY (`product_type_id`)
+  REFERENCES `shop`.`product_type` (`id`)
+  ON DELETE CASCADE
+  ON UPDATE NO ACTION;
+
+  (Создание таблиц с отношением "многие ко многим")
+
+  
+CREATE TABLE `shop`.`order` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `user_name` VARCHAR(128) NOT NULL,
+  `phone` VARCHAR(45) NOT NULL,
+  `datetime` DATETIME NOT NULL,
+  PRIMARY KEY (`id`));
+  INSERT INTO shop.order (user_name,phone,datetime) VALUES ('Василий', "555-55-55", "2020-10-12 14:46");
+  
+  CREATE TABLE `shop`.`order_products` (
+  `order_id` INT NOT NULL,
+  `product_id` INT NOT NULL,
+  `count` INT NULL,
+  PRIMARY KEY (`order_id`, `product_id`));
+  
+INSERT INTO `shop`.`order_products` (`order_id`, `product_id`, `count`) VALUES ('1', '1', '1');
+INSERT INTO `shop`.`order_products` (`order_id`, `product_id`, `count`) VALUES ('1', '2', '3');
+
+ALTER TABLE `shop`.`order_products` 
+ADD INDEX `fk_order_products_product_idx` (`product_id` ASC) VISIBLE;
+;
+ALTER TABLE `shop`.`order_products` 
+ADD CONSTRAINT `fk_order_products_order`
+  FOREIGN KEY (`order_id`)
+  REFERENCES `shop`.`order` (`id`)
+  ON DELETE NO ACTION
+  ON UPDATE NO ACTION,
+ADD CONSTRAINT `fk_order_products_product`
+  FOREIGN KEY (`product_id`)
+  REFERENCES `shop`.`product` (`id`)
+  ON DELETE NO ACTION
+  ON UPDATE NO ACTION;
+  
+ALTER TABLE `shop`.`order_products` 
+CHANGE COLUMN `count` `count` INT NOT NULL ;  
