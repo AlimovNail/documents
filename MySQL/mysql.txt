@@ -221,3 +221,56 @@ ADD CONSTRAINT `fk_order_products_product`
   
 ALTER TABLE `shop`.`order_products` 
 CHANGE COLUMN `count` `count` INT NOT NULL ;  
+
+(Объединение данных из нескольких таблиц)
+use shop;
+SELECT * FROM product;
+SELECT * FROM category where id = 1 or id = 3 or id = 2;
+SELECT * FROM category where id >= 1 and id <= 3;
+SELECT * FROM category where id IN (1,2,3);
+
+(Оператор INNER JOIN)
+
+SELECT * FROM product
+    INNER JOIN category on product.category_id = category.id;
+
+SELECT * FROM product
+    INNER JOIN category on product.category_id = category.id;
+
+SELECT product.id, price, name FROM product
+  INNER JOIN category on product.category_id = category.id;
+
+SELECT * FROM category
+  INNER JOIN product on product.category_id = category.id;    
+ 
+SELECT * FROM product
+  INNER JOIN category on product.category_id = category.id
+    WHERE price < 20000;
+    
+SELECT * FROM product
+  INNER JOIN category on product.category_id = category.id
+    INNER JOIN brand on brand_id = product.brand_id
+    INNER JOIN product_type on product_type_id = product.product_type_id;
+    
+SELECT product.id, brand.type, product_type.type, category.name, product.price FROM product
+  INNER JOIN category on product.category_id = category.id
+    INNER JOIN brand on brand_id = product.brand_id
+    INNER JOIN product_type on product_type_id = product.product_type_id;    
+-- DZ --
+SELECT * FROM product
+  INNER JOIN category ON product.category_id = category.id;
+    
+SELECT product.id, brand.type, product_type.type, category.name, product.price FROM product
+  INNER JOIN category on product.category_id = category.id
+    INNER JOIN brand on brand_id = product.brand_id
+    INNER JOIN product_type on product_type_id = product.product_type_id
+    WHERE product_type.type = 'Футболка'; 
+    
+(LEFT JOIN, RIGTH JOIN)   
+SELECT category.* FROM category
+  LEFT JOIN product ON product.category_id = category.id
+    WHERE product.id is NULL;
+    
+SELECT category.* FROM product
+  RIGHT JOIN category ON product.category_id = category.id
+    WHERE product.id is NULL;       
