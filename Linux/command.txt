@@ -58,3 +58,40 @@ wq = сохранить и выйти из редактора
 CTRL + R = ввод и поиск что вводили раньше
 
 CTRL + D
+
+(Пользователи и группы)
+// Проброс портов 127.0.0.1 -р 2222
+id = атрибуты пользователя
+/etc/passwd = список учетных аккаунтов в текстовом поле
+/etc/group = инфа о группах и пользователях, состоящих в этих группах
+/etc/shadow = инфа о паролях пользователей из файла passwd
+
+useradd [name] = создание нового пользователя.Но у него не будет домашней папки
+cat /etc/passwd | grep [name_user] = вывод из файла строки где есть совпадение по name_user;
+userdel [name] = удаление пользователя;
+useradd -m [name] = создание пользователя + создание домашней папки с именем name;
+passwd [user_name] = создание пароля для юзера user_name;
+cat /etc/shadow | grep [name] = 
+su [name_user] = переключение на пользователя name_user и работать под ним
+usermod -s /bin/bash [user_name] = задать пользователю оболочку для работы
+adduser [name] = создание пользователя со всеми параметрами
+groupadd [name] = cоздание группы
+delgroup [name] = удаление группы
+usermod -a -G [name_group] [name_user] = добавление юзера в группу
+usermod -G [name_group] [name_user] = удаление из группы
+gpasswd -d [name_user] [name_group] = удаление юзера из группы
+
+which is
+which apt
+
+rw-rw-r -- = 1-User-2-group - 3 other
+
+cat /etc/sudoers
+visudo
+usermod -aG sudo [name_user] = добавление юзера в группу sudo
+
+%sudo ALL=(ALL:ALL) NOPASSWD: ALL
+
+[user] ALL=(ALL:ALL) /usr/bin/apt-get
+
+cat /etc/sudoers | grep [user_name]
