@@ -95,3 +95,48 @@ usermod -aG sudo [name_user] = добавление юзера в группу s
 [user] ALL=(ALL:ALL) /usr/bin/apt-get
 
 cat /etc/sudoers | grep [user_name]
+
+(Lesson-3 Загрузка ОС)
+
+systemctl status ssh.service = вывод инфы о процессе ssh
+apt-get install nginx = установка nginx
+systemctl status nginx.service
+systemctl start nginx.service = запуск nginx
+systemctl stop nginx.service = остановка nginx
+systemctl disable nginx.service = при загрузке системы автоматически не загрузиься
+systemctl enable nginx.service
+systemctl cat nginx.service
+systemctl list-unit-files | grep enabled = список всех запущенных процессов
+systemctl --help
+kill -l
+SIGTERM = остановка программы
+SIGKILL = убить процесс
+SIGCHILD = убить процессы зомби
+
+kill -9 2022
+cat dir3/2 > err_log.txt = Ошибку запишет в файл
+cat dir3/1 > OK.txt 2> err_log.txt = перенаправление вывода потоков
+find / -name test 2 > /dev/null = вывод ошибки в нулевой интерфейс
+
+(конвейр / pipeline)
+lc -l /etc/ | cut -d ' ' -f 1 | inig
+
+(Мониторинг процессов и  состояние компьютера )
+
+ps -aux = вывод всех рабочих процессов
+ps -aux | grep nginx
+ps -ef | grep nginx 
+ps -eo pid,user,cmd | grep nginx
+ps -fU nail = вывод всех процессов запущенных userom
+top = инфа о системе
+df -h = инфа о памяти 
+lsoft 
+lsoft | grep log = понять какие процессы куда выгружают в какие файлы
+journalctl = systemctl
+du -sh/* | grep sort = вывод папок сортированных по размеру
+vim /etc/ssh/sshd_config
+
+4)
+apt install mc
+CTRL+O = перевод программы в бакграунд
+ps -eof
