@@ -140,3 +140,7 @@ vim /etc/ssh/sshd_config
 apt install mc
 CTRL+O = перевод программы в бакграунд
 ps -eof
+
+
+ps -ef | grep mc
+pgrep mc = вывод ID программы мс

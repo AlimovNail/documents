@@ -1,0 +1,99 @@
+5 - Устройство файловой системы Linux
+
+tree
+tree -d -L 1/ = вывод дерева каталогов в корневой папке
+lsblk = вывод всех дисков (sda)
+shutdown now = остановка операционной системы
+parted /dev/sdo = партиция диска (100мв) - деление на части
+print = инфа о диске
+
+(Partition table unknown)
+создание partition table
+
+mklabel gpt
+mkpart
+Partition name? music
+start?1
+End?30  = создание части под музыку с 30Мв
+
+
+mkpart
+Partition name? database
+start?30
+End?50  = создание части под базу
+
+quit
+lsblk
+mkf
+
+mkfs.xfs /dev/sd
+mkfs.xfs /dev/sdb1
+mkfs.xfs /dev/sdb2 = форматирование патиций
+
+ls -l /mnt/
+mkdir /mnt/music
+mkdir /mnt/database
+du -sh /mnt/* = размер наших папок созданных
+
+mount /dev/sdb
+mount /dev/sdb1/mnt/music/
+mount /dev/sdb2/mnt/database/
+
+ls -lR /mnt/
+
+umount /mnt/music = отмонтировать папку
+umount /mnt/database = отмонтировать папку
+
+vim /etc/fstab
+
+/dev/sdb1       /mnt/music  xfs defaults  0  0
+
+mouunt -a 
+
+тип файла/
+права доступа/
+владелец/
+и т.д./  Все это относиться к файлу
+
+inode = индексный дескриптор файла
+
+ls -li = просмотр inode для файла
+
+cd /hw4
+
+ln [file] [название ссылки] = [file = err_cat.log] [link_err]
+ls -li = err_cat.log & link_err = одинаковый inode
+cat err_cat.log = cat link_err
+rm err_cat.log
+cat link_err = выведет тоже самое
+ == Весь блог создание жестких ссылок
+
+
+ln -s [file] [наз-е ссылки] = [test.txt] [sym_link]
+ls -li
+test.txt & sym_link = inode меняется
+rm test.txt
+cat sym_link = error
+== весь блог создание символических ссылок
+
+(Права доступа к файлам и каталогам)
+
+chmod 644 link.err = выставление прав доступа
+chmod u + x link.err = добавление к файлу х- бит (исполнение)
+chmod g + wx, o + w link_err
+chmod u-x, g-r, o-w link_err = вычетает права доступа
+chown root:geekbrains link_err = смена пользователя и группы файла
+chown :developer link_err = смена только группы
+
+mkdir share
+chown :geekbrains share/
+chown g+s share/ 
+=== Весь блог SGID
+
+mkdir sticky
+chmod +t stiсky/
+== все файлы созданные внутри этой папки сможет удалять только владелец этой папки
+
+stat [file] = просмотр атрибутов
+
+ 

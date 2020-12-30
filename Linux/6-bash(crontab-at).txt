@@ -1,0 +1,104 @@
+mkdir les-6 && cd les-6
+
+vim script.sh
+= echo "Hello script" > file1
+= bash script.sh
+== Весь блок создание простого баш файла и его запуск
+
+which bash = вывод путь где лежит утилита баш
+
+vim script.sh
+#!/usr/bin/bash = указывает какую утилиту использовать для запуска
+...
+
+chmod +x script.sh = добавляет бит на исполнение
+./script.sh = вызвать исполнение данного скрипта
+
+(Передача аргументов)
+
+echo 'arguments = $1 $2 $3' = (так можно до 9)
+./script.sh Hello 123 6 = вызов и передача аргументов
+
+(Условные операторы)
+
+if [-z $3] = -z проверка на пустоту $3
+then
+	echo 'Empty'
+else 
+	echo 'Arg3 = $3'
+	echo $(($1 + $2)) = математические операции через двойные скобки
+fi
+
+if [$1 -eq $2] = $1 == $2 = if (($1 == $2))
+
+(Циклы)
+
+for i in {1..5}
+do
+	echo $i
+	sleep 1 = остановка на 1 секунду
+done
+
+for i in $((ls))
+do
+	echo $i = выведет все содержимое (ls) читает из папки где мы его запускаем
+done
+
+#!/usr/bin/bash
+a = 1
+b = 5
+while(($a < $b))
+do
+	echo "a = $a"
+	((a = a + 1))
+done
+
+(RegEx)
+
+cat /etc/nginx/nginx.conf | grep -P '^\s*#' = вывод который попадает под шаблон
+
+				| grep -vP '^\s*#' = который не поппадает под шаблон
+
+				| grep -vP '^$' = уберет лишние пустые строки
+
+sed -n 2p [file] = по номеру строки может напечатать из файла
+sed -i 2d [file] = часть файла удалиться (2-я строка)
+sed '/^$/d' [file] = поиск и удаление пустой строки
+
+awk -F : '{print $1}' /etc/passwd = вывод 1-й колонки из файла
+awk -F : /[user]/ '{print $1, $7}' /etc/passwd
+
+(Cron & at)
+
+at 00:00
+warning: commands will be executed using /bin/sh
+at> 
+at> echo "123"
+at> exit
+at> <EOT>
+job 1 at Fri Dec 25 00:00:00 2020
+
+atq = выведет когда сработает планировщик
+
+atrm 1 = удаление
+
+cat /etc/crontab
+
+vim /etc/cron.d/job_backup
+
+#mo h  dom  mon  dow  user  command
+0	0	*	*	*	  root  cp -r /etc/ /home/user
+
+*/2 каждые 2 часа  1-5
+
+#m 	h  dom	mon	 dow	user	command
+*	*	*	*	  *		root	/home/kglushen/backup.sh
+
+vim backup.sh
+#!/usr/bin/bash
+
+cp /etc/ /tmp
+
+for i in {1..5};do for k in {20..25};do echo $i $k;done;done
+
+tar -czf [имя_архива].tar [папка] = создание архива  
